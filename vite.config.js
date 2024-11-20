@@ -53,7 +53,7 @@ const manifestForPlugin = {
     display: "standalone",
     scope: "/",
     start_url: "/",
-    orientation: "landscap",
+    orientation: "portrait",
   },
 };
 
