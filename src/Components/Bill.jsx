@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { useRef } from 'react'
 
 const BillItem = ({ index, food_name, food_img, item, current, current_Order, update, isPaid }) => {
@@ -82,16 +82,16 @@ const BillItem = ({ index, food_name, food_img, item, current, current_Order, up
 }
 
 
-const Bill = ({ foodItems, current, update, isPaid, setCurrent }) => {
-
-  const billItemContainerRef = useRef(null); // Step 1: Create a ref
+const Bill = forwardRef(({ foodItems, current, update, isPaid, setCurrent }, ref) => {
+  const billItemContainerRef = useRef(null);
+  const [wasItemAdded, setWasItemAdded] = useState(false);
 
   let totalBill = 0;
   let current_Order = JSON.parse(localStorage.getItem(current));
 
   if (current_Order) {
     totalBill = current_Order.ordered_items.reduce((acc, item) => {
-      return acc + (item.item_price * item.item_quantity);
+      return acc + item.item_price * item.item_quantity;
     }, 0);
   }
 
@@ -101,62 +101,86 @@ const Bill = ({ foodItems, current, update, isPaid, setCurrent }) => {
     localStorage.setItem(current, JSON.stringify(paid_order));
     update();
     setCurrent(NaN);
-  }
+  };
 
   useEffect(() => {
-    // Step 2: Adjust scroll position when `current_Order` changes
-    if (billItemContainerRef.current) {
+    if (wasItemAdded && billItemContainerRef.current) {
       billItemContainerRef.current.scrollTop = billItemContainerRef.current.scrollHeight;
+      setWasItemAdded(false); // Reset flag
     }
-  }, [current_Order]); // Only run when `current_Order` changes
+  }, [wasItemAdded]);
+
+  const handleAddItem = () => {
+    setWasItemAdded(true);
+  };
+
+  useImperativeHandle(ref, ()=>({
+    handleAddItem,
+  }));
 
   return (
-    <div className='w-full bill-container overflow-x-auto rounded-md relative py-1 bg-light-primary flex flex-col h-full'>
-      <div className='bg-alwhite px-4 font-bold text-2xl py-4 flex justify-between items-center'>
-        <h1 className='text-black flex flex-col gap-1'>
+    <div className="w-full bill-container overflow-x-auto rounded-md relative py-1 bg-light-primary flex flex-col h-full">
+      <div className="bg-alwhite px-4 font-bold text-2xl py-4 flex justify-between items-center">
+        <h1 className="text-black flex flex-col gap-1">
           {current_Order ? current_Order.name : ""}
-          <span className='text-xs text-text'>{current_Order ? current_Order.date : ""}</span>
+          <span className="text-xs text-text">{current_Order ? current_Order.date : ""}</span>
         </h1>
-        {current_Order && <span className='font-bold text-accent'>₹{totalBill.toFixed(2)}</span>}
+        {current_Order && <span className="font-bold text-accent">₹{totalBill.toFixed(2)}</span>}
       </div>
 
-      <div ref={billItemContainerRef} className='flex flex-col gap-4 overflow-auto scrollbar-custom h-full rounded-md pt-1'>
-        {current_Order ?
-          current_Order.ordered_items.length ? <>
+      <div ref={billItemContainerRef} className="flex flex-col gap-4 overflow-auto scrollbar-custom h-full rounded-md pt-1">
+        {current_Order ? (
+          current_Order.ordered_items.length ? (
             <table className="w-full bg-alwhite rounded-lg overflow-hidden ">
-              <tbody className=''>
+              <tbody>
                 {current_Order.ordered_items.map((item, index) => {
-                  let ordered_food = foodItems.find(food => food.id == item.item_id);
-
-                  return <BillItem key={index} index={index} food_name={ordered_food.name} food_img={ordered_food.pic_path} item={item} current={current} current_Order={current_Order} update={update} isPaid={isPaid} />
+                  let ordered_food = foodItems.find(food => food.id === item.item_id);
+                  return (
+                    <BillItem
+                      key={index}
+                      index={index}
+                      food_name={ordered_food.name}
+                      food_img={ordered_food.pic_path}
+                      item={item}
+                      current={current}
+                      current_Order={current_Order}
+                      update={update} 
+                      isPaid={isPaid}
+                    />
+                  );
                 })}
               </tbody>
             </table>
-          </> :
-            "Please Add Items" :
-          "Not Found"}
+          ) : (
+            "Please Add Items"
+          )
+        ) : (
+          "Not Found"
+        )}
       </div>
 
-
-      {(current && current_Order.ordered_items.length != 0) ? <div className='sticky border-t border-t-black bg-alwhite py-2 px-1 pr-6 flex justify-between items-center'>
-        {/* Add the print button */}
-        <div className='flex gap-4'>
-          <button onClick={() => { window.print(); }} className=" bg-blue-500 text-white px-4 py-2">
-            Print Bill
-          </button>
-          {!isPaid && <button onClick={() => { markAsPaid(); }} className=" bg-[#388E3C] text-white px-4 py-2">
-            Paid
-          </button>}
+      {current && current_Order.ordered_items.length !== 0 ? (
+        <div className="sticky border-t border-t-black bg-alwhite py-2 px-1 pr-6 flex justify-between items-center">
+          <div className="flex gap-4">
+            <button onClick={() => window.print()} className="bg-blue-500 text-white px-4 py-2">
+              Print Bill
+            </button>
+            {!isPaid && (
+              <button onClick={markAsPaid} className="bg-[#388E3C] text-white px-4 py-2">
+                Paid
+              </button>
+            )}
+          </div>
+          <span className="text-text font-bold text-2xl">
+            Total : <span className="text-accent">{totalBill}</span>
+          </span>
         </div>
-        <span className='text-text font-bold text-2xl'>
-          Total :  <span className='text-accent'>{totalBill}</span>
-        </span>
-      </div> :
-        ""}
-
-
+      ) : (
+        ""
+      )}
     </div>
-  )
-}
+  );
+});
 
-export default Bill
+export default Bill;
+

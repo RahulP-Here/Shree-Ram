@@ -74,7 +74,7 @@ const Modal = ({ closeModal, setCurrent, updateList, setIspaid, list }) => {
             style={{ zIndex: 2 }}
             className="flex justify-center items-center w-full h-[100dvh] absolute inset-0 backdrop-blur-sm bg-black/50"
         >
-            <div className="flex flex-col gap-4 p-4 bg-black rounded-lg w-full max-w-3xl border border-gray-600">
+            <div className="flex flex-col gap-4 p-4 bg-black rounded-lg w-full max-w-4xl border border-gray-600">
                 <h2
                     className="place-self-end text-4xl font-bold text-white cursor-pointer"
                     onClick={closeModal}
@@ -83,7 +83,7 @@ const Modal = ({ closeModal, setCurrent, updateList, setIspaid, list }) => {
                 </h2>
 
                 {/* Tokens Container */}
-                <div className="tokens grid grid-cols-5 sm:grid-cols-7 md:grid-cols-10 gap-2 p-4 bg-gray-800 border border-gray-600 rounded-lg h-[14rem] overflow-auto scrollbar-custom">
+                <div className="tokens grid grid-cols-5 sm:grid-cols-7 md:grid-cols-10 gap-2 p-4 bg-gray-800 border border-gray-600 rounded-lg h-[30rem] overflow-auto scrollbar-custom">
                      {Array.from({ length: 100 }, (_, i) => {
                         const tokenNumber = i + 1;
                         const isReserved = unavilabeToken.includes(`Token :- ${tokenNumber}`);
@@ -91,7 +91,7 @@ const Modal = ({ closeModal, setCurrent, updateList, setIspaid, list }) => {
                         return (
                             <button
                                 key={tokenNumber}
-                                className={`border border-gray-600 rounded p-2 text-sm font-bold ${
+                                className={`border border-gray-600 rounded p-6 text-xl font-bold ${
                                     isReserved
                                         ? "bg-red-500 text-black cursor-not-allowed"
                                         : "text-white bg-gray-700 hover:bg-primary hover:text-black"

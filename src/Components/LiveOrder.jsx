@@ -2,68 +2,71 @@ import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import { MdFastfood, MdNoFood, MdDeleteForever } from "react-icons/md";
 import { FcPaid } from "react-icons/fc";
+import SingleOrder from './SingleOrder';
 
 
-const Order = ({ paid, customer, customerId, updateList, currentCustomer, setCurrent }) => {
 
-  const del = (e) => {
-    e.stopPropagation();
-    localStorage.removeItem(customerId);
-    updateList(Object.keys(localStorage));
-    if (Number(currentCustomer) === Number(customer.id)) {
-      setCurrent(NaN);
-    }
-  }
+// const Order = ({ billRef, paid, customer, customerId, updateList, currentCustomer, setCurrent }) => {
 
-  const markAsPaid = (event) => {
-    event.stopPropagation();
-    let paid_order = JSON.parse(localStorage.getItem(customerId));
-    paid_order.paid = true;
-    localStorage.setItem(customerId, JSON.stringify(paid_order));
-    updateList(Object.keys(localStorage));
+//   const del = (e) => {
+//     e.stopPropagation();
+//     localStorage.removeItem(customerId);
+//     updateList(Object.keys(localStorage));
+//     if (Number(currentCustomer) === Number(customer.id)) {
+//       setCurrent(NaN);
+//     }
+//   }
 
-    if (Number(currentCustomer) === Number(customer.id)) {
-      setCurrent(NaN);
-    }
+//   const markAsPaid = (event) => {
+//     event.stopPropagation();
+//     let paid_order = JSON.parse(localStorage.getItem(customerId));
+//     paid_order.paid = true;
+//     localStorage.setItem(customerId, JSON.stringify(paid_order));
+//     updateList(Object.keys(localStorage));
 
-  }
+//     if (Number(currentCustomer) === Number(customer.id)) {
+//       setCurrent(NaN);
+//     }
 
-  const clickSetCurrent = (e) => {
-    setCurrent(Number(customerId));
-  }
+//   }
 
-  let detail = JSON.parse(localStorage.getItem(customerId)) || customer;
+//   const clickSetCurrent = (e) => {
+//     setCurrent(Number(customerId));
+//     billRef.current.handleAddItem();
+//   }
 
-  let customer_name = detail.name;
-  const total = detail.ordered_items.reduce((acc, item) => {
-    return acc + (item.item_price * item.item_quantity);
-  }, 0);
+//   let detail = JSON.parse(localStorage.getItem(customerId)) || customer;
 
-  let extra_style = ' border-b border-b-light-text';
-  if (Number(currentCustomer) === Number(customer.id)) {
-    extra_style = ' bg-white';
-  }
+//   let customer_name = detail.name;
+//   const total = detail.ordered_items.reduce((acc, item) => {
+//     return acc + (item.item_price * item.item_quantity);
+//   }, 0);
 
-  return (
+//   let extra_style = ' border-b border-b-light-text';
+//   if (Number(currentCustomer) === Number(customer.id)) {
+//     extra_style = ' bg-white';
+//   }
 
-    <div onClick={clickSetCurrent} className={'cursor-pointer flex justify-between items-center px-2 py-2' + extra_style}>
-      <div className="flex flex-col w-1/2">
-        <h4 className='font-semibold text-xl truncate w-full text-text'>{customer_name}</h4>
-        {paid ? <span className='font-extrabold text-lg'>{total}.00 Rs</span> :
-          <span className='font-bold  text-accent text-lg'>{total}.00 Rs</span>}
-      </div>
-      <div className="label flex gap-2 items-center">
+//   return (
 
-        {paid ? "" :
-          <button onClick={markAsPaid} className='text-3xl rounded-[50%] bg-alwhite'><FcPaid /></button>}
-        <button onClick={del} className='text-3xl text-red-500 rounded-[50%] bg-alwhite'><MdDeleteForever /></button>
-      </div>
-    </div>
-  )
-}
+//     <div onClick={clickSetCurrent} className={'cursor-pointer flex justify-between items-center px-2 py-2' + extra_style}>
+//       <div className="flex flex-col w-1/2">
+//         <h4 className='font-semibold text-xl truncate w-full text-text'>{customer_name}</h4>
+//         {paid ? <span className='font-extrabold text-lg'>{total}.00 Rs</span> :
+//           <span className='font-bold  text-accent text-lg'>{total}.00 Rs</span>}
+//       </div>
+//       <div className="label flex gap-2 items-center">
+
+//         {paid ? "" :
+//           <button onClick={markAsPaid} className='text-3xl rounded-[50%] bg-alwhite'><FcPaid /></button>}
+//         <button onClick={del} className='text-3xl text-red-500 rounded-[50%] bg-alwhite'><MdDeleteForever /></button>
+//       </div>
+//     </div>
+//   )
+// }
 
 
-const LiveOrder = ({ paid, setIsPaid, list, showModal, updateList, currentCustomer, setCurrent }) => {
+const LiveOrder = ({ paid, billRef, setIsPaid, list, showModal, updateList, currentCustomer, setCurrent }) => {
 
 
   const [orders, setOrders] = useState([])
@@ -74,8 +77,13 @@ const LiveOrder = ({ paid, setIsPaid, list, showModal, updateList, currentCustom
       return { id, ...orderDetail };
     });
 
-    setOrders(order_list.filter(order => order.paid === paid));
-  }, [list, paid])
+    // Filter orders based on `paid` and sort by `id` (customer_id, which is a timestamp)
+    const filteredOrders = order_list
+      .filter(order => order.paid === paid)
+      .sort((a, b) => Number(b.id) - Number(a.id)); // Newest to oldest by customer_id
+
+    setOrders(filteredOrders);
+  }, [list, paid]);
 
 
   const addCustomer = () => {
@@ -103,7 +111,8 @@ const LiveOrder = ({ paid, setIsPaid, list, showModal, updateList, currentCustom
 
       <div className="order-list flex flex-col gap-4 overflow-auto scrollbar-custom h-full ">
         {orders.map((customer, index) => {
-          return <Order paid={paid} customer={customer} customerId={customer.id} key={customer.id} updateList={updateList} currentCustomer={currentCustomer} setCurrent={setCurrent} />
+          // return <Order billRef={billRef} paid={paid} customer={customer} customerId={customer.id} key={customer.id} updateList={updateList} currentCustomer={currentCustomer} setCurrent={setCurrent} />
+          return <SingleOrder billRef={billRef} paid={paid} customer={customer} customerId={customer.id} key={customer.id} updateList={updateList} currentCustomer={currentCustomer} setCurrent={setCurrent} />
         })}
       </div>
 

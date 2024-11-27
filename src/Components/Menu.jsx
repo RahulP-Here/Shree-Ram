@@ -1,7 +1,7 @@
 import React from 'react';
 import './Menu.css';
 
-const Menu = ({ foodItems, currentCustomer, update, updateList }) => {
+const Menu = ({ foodItems, currentCustomer, update, billRef }) => {
 
     const addItem = (id) => {
         if (currentCustomer) {
@@ -27,6 +27,7 @@ const Menu = ({ foodItems, currentCustomer, update, updateList }) => {
                 currentCustomer_order_info.ordered_items.push(order);
                 localStorage.setItem(currentCustomer, JSON.stringify(currentCustomer_order_info));
                 update();
+                billRef.current.handleAddItem();
             }
         }
     }
