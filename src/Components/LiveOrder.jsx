@@ -5,67 +5,6 @@ import { FcPaid } from "react-icons/fc";
 import SingleOrder from './SingleOrder';
 
 
-
-// const Order = ({ billRef, paid, customer, customerId, updateList, currentCustomer, setCurrent }) => {
-
-//   const del = (e) => {
-//     e.stopPropagation();
-//     localStorage.removeItem(customerId);
-//     updateList(Object.keys(localStorage));
-//     if (Number(currentCustomer) === Number(customer.id)) {
-//       setCurrent(NaN);
-//     }
-//   }
-
-//   const markAsPaid = (event) => {
-//     event.stopPropagation();
-//     let paid_order = JSON.parse(localStorage.getItem(customerId));
-//     paid_order.paid = true;
-//     localStorage.setItem(customerId, JSON.stringify(paid_order));
-//     updateList(Object.keys(localStorage));
-
-//     if (Number(currentCustomer) === Number(customer.id)) {
-//       setCurrent(NaN);
-//     }
-
-//   }
-
-//   const clickSetCurrent = (e) => {
-//     setCurrent(Number(customerId));
-//     billRef.current.handleAddItem();
-//   }
-
-//   let detail = JSON.parse(localStorage.getItem(customerId)) || customer;
-
-//   let customer_name = detail.name;
-//   const total = detail.ordered_items.reduce((acc, item) => {
-//     return acc + (item.item_price * item.item_quantity);
-//   }, 0);
-
-//   let extra_style = ' border-b border-b-light-text';
-//   if (Number(currentCustomer) === Number(customer.id)) {
-//     extra_style = ' bg-white';
-//   }
-
-//   return (
-
-//     <div onClick={clickSetCurrent} className={'cursor-pointer flex justify-between items-center px-2 py-2' + extra_style}>
-//       <div className="flex flex-col w-1/2">
-//         <h4 className='font-semibold text-xl truncate w-full text-text'>{customer_name}</h4>
-//         {paid ? <span className='font-extrabold text-lg'>{total}.00 Rs</span> :
-//           <span className='font-bold  text-accent text-lg'>{total}.00 Rs</span>}
-//       </div>
-//       <div className="label flex gap-2 items-center">
-
-//         {paid ? "" :
-//           <button onClick={markAsPaid} className='text-3xl rounded-[50%] bg-alwhite'><FcPaid /></button>}
-//         <button onClick={del} className='text-3xl text-red-500 rounded-[50%] bg-alwhite'><MdDeleteForever /></button>
-//       </div>
-//     </div>
-//   )
-// }
-
-
 const LiveOrder = ({ paid, billRef, setIsPaid, list, showModal, updateList, currentCustomer, setCurrent }) => {
 
 

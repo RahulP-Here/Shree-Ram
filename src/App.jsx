@@ -17,18 +17,16 @@ function App() {
   const [ispaid, setIspaid] = useState(false);
 
   const billRef = useRef();
-
+  
   const FoodItems = [
-    { id: 1, name: 'સિંગલ નંગ ', price: 15, pic_path: '/images/foodItems/single-piece.png' },
-    { id: 2, name: 'મસાલા નંગ ', price: 20, pic_path: '/images/foodItems/masala-piece.png' },
+    { id: 1, name: 'મીક્ષ પ્લેટ', price: 45, pic_path: '/images/foodItems/mix-plate.png' },
+    { id: 2, name: 'મસાલા ઢોંસા', price: 60, pic_path: '/images/foodItems/masala-dhosa.png' },
     { id: 3, name: 'બ્રેડ પકોડા', price: 25, pic_path: '/images/foodItems/bread-pakoda.png' },
-    { id: 4, name: 'મીક્ષ પ્લેટ', price: 45, pic_path: '/images/foodItems/mix-plate.png' },
-    { id: 5, name: 'મસાલા ઢોંસા', price: 60, pic_path: '/images/foodItems/masala-dhosa.png' },
+    { id: 4, name: 'સિંગલ નંગ ', price: 15, pic_path: '/images/foodItems/single-piece.png' },
+    { id: 5, name: 'મસાલા નંગ ', price: 20, pic_path: '/images/foodItems/masala-piece.png' },
     { id: 6, name: 'પેપર ઢોંસા', price: 40, pic_path: '/images/foodItems/paper-dhosa.png' },
-    { id: 7, name: 'ઈડલી પ્લેટ', price: 40, pic_path: '/images/foodItems/idli-plate.png' },
-    { id: 8, name: 'વડા પ્લેટ', price: 45, pic_path: '/images/foodItems/vada-plate.png' },
-    { id: 9, name: 'પાણી ની બોટલ', price: 10, pic_path: '/images/foodItems/water-bottle.png' },
-    { id: 10, name: 'મસાલા છાશ', price: 10, pic_path: '/images/foodItems/masala-chass.png' },
+    { id: 7, name: 'પાણી ની બોટલ', price: 10, pic_path: '/images/foodItems/water-bottle.png' },
+    { id: 8, name: 'મસાલા છાશ', price: 10, pic_path: '/images/foodItems/masala-chass.png' },
   ];
 
 
