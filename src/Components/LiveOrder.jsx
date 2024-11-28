@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import { MdFastfood, MdNoFood, MdDeleteForever } from "react-icons/md";
-import { FcPaid } from "react-icons/fc";
 import SingleOrder from './SingleOrder';
 
 

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
-// import { FcPaid } from "react-icons/fc";
-// import { useSwipeable } from "react-swipeable";
+
 
 const SingleOrder = ({
     billRef,
@@ -58,8 +57,6 @@ const SingleOrder = ({
 
     let detail = JSON.parse(localStorage.getItem(customerId)) || customer;
     let customer_name = detail.name;
-    let time = (detail.date).split('|')[1];  
-    let customer_arrived_time = `${time.split(':')[0]}:${time.split(':')[1]} ${time[time.length-2] + time[time.length-1]}`; 
     const total = detail.ordered_items.reduce((acc, item) => {
         return acc + item.item_price * item.item_quantity;
     }, 0);
@@ -105,9 +102,7 @@ const SingleOrder = ({
                             <MdDeleteForever />
                         </button>
                     )
-                ) :(
-                    <span className="font-semibold text-sm text-text">{customer_arrived_time}</span>
-                )
+                ) :""
                 
                 }
 
