@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
-import { FcPaid } from "react-icons/fc";
-import { useSwipeable } from "react-swipeable";
+// import { FcPaid } from "react-icons/fc";
+// import { useSwipeable } from "react-swipeable";
 
 const SingleOrder = ({
     billRef,
